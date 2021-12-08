@@ -99,7 +99,7 @@ end
 to update-display
   ask turtles
     [ if shape != turtle-shape [ set shape turtle-shape ]
-      set color ifelse-value sick? [ red ] [ ifelse-value immune? [ grey ] [ green ] ] ] ;; Changer la couleur des points
+      set color ifelse-value sick? [ red ] [ ifelse-value immune? [ grey ] [ ifelse-value vaccinated? [ blue ] [ green ] ] ] ] ;; Changer la couleur des points
 end
 
 ;;Turtle counting variables are advanced.
@@ -200,7 +200,7 @@ duration
 duration
 0.0
 15.0
-13.0
+14.0
 1.0
 1
 days
@@ -215,7 +215,7 @@ chance-recover
 chance-recover
 0.0
 99.0
-49.0
+75.0
 1.0
 1
 %
@@ -230,7 +230,7 @@ infectiousness
 infectiousness
 0.0
 99.0
-67.0
+85.0
 1.0
 1
 %
@@ -240,7 +240,7 @@ BUTTON
 550
 515
 620
-546
+548
 Setup
 setup
 NIL
@@ -348,7 +348,7 @@ CHOOSER
 turtle-shape
 turtle-shape
 "circle" "circle 2" "person" "default" "airplane" "arrow" "box" "bug" "butterfly" "car" "cow" "cylinder" "dot"
-1
+0
 
 SLIDER
 10
@@ -359,7 +359,7 @@ immunity-duration
 immunity-duration
 0
 100
-72.0
+40.0
 1
 1
 days
@@ -374,7 +374,7 @@ number-vaccinated
 number-vaccinated
 0
 300
-0.0
+77.0
 1
 1
 People
@@ -389,7 +389,7 @@ vaccine-immunity-time
 vaccine-immunity-time
 0
 365
-72.0
+56.0
 1
 1
 Days
@@ -403,8 +403,8 @@ SLIDER
 vaccination-speed
 vaccination-speed
 0
-100
-1.0
+20
+0.0
 1
 1
 Personne/Days
