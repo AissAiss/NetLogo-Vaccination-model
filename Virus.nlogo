@@ -43,8 +43,11 @@ end
 
 ;; Rendre malade une personne
 to get-sick
-  set sick? true
+  if not mask-on? [
+     set sick? true
   set remaining-immunity 0
+  ]
+
 end
 
 to get-vaccinated
@@ -122,7 +125,7 @@ end
 
 to vaccination
   ask n-of vaccination-speed turtles
-    [ get-vaccinated ]
+  [ if random-float 100 < vaccine-efficacy and not vaccinated?  [ get-vaccinated] ]
 end
 
 ;; If a turtle is sick, it infects other turtles on the same patch.
@@ -163,17 +166,51 @@ end
 to startup
   setup-constants ;; so that carrying-capacity can be used as upper bound of number-people slider
 end
+
+;; fonction ajoutée
+to confirm-virus
+  if virus = "Covid-19" [
+   set chance-recover 97
+   set infectiousness 50
+   set duration 14
+  ] if virus = "spanish-flu" [
+    set chance-recover 90
+    set infectiousness 60
+    set duration 15
+  ] if virus = "plague" [
+    set chance-recover 50
+    set infectiousness 70
+    set duration 20
+  ]
+end
+to confirm-vaccine
+  if vaccine-brand ="pfizer"[
+    set vaccine-efficacy 90
+    set vaccine-immunity-time 180
+  ]if vaccine-brand = "moderna"[
+    set vaccine-efficacy 95
+    set vaccine-immunity-time 190
+  ]if vaccine-brand = "sinopharme"[
+    set vaccine-efficacy 80
+    set vaccine-immunity-time 200
+  ]if vaccine-brand = "astrazeneca"[
+    set vaccine-efficacy 70
+    set vaccine-immunity-time 220
+  ]
+end
+to redose
+end
 @#$#@#$#@
 GRAPHICS-WINDOW
-550
-10
-1048
-509
+560
+11
+1038
+490
 -1
 -1
-14.0
+13.43
 1
-10
+300
 1
 1
 1
@@ -189,18 +226,18 @@ GRAPHICS-WINDOW
 1
 1
 ticks
-30.0
+25.0
 
 SLIDER
 10
-140
+135
 204
-173
+168
 duration
 duration
 0.0
-15.0
-14.0
+20.0
+20.0
 1.0
 1
 days
@@ -215,7 +252,7 @@ chance-recover
 chance-recover
 0.0
 99.0
-75.0
+50.0
 1.0
 1
 %
@@ -230,7 +267,7 @@ infectiousness
 infectiousness
 0.0
 99.0
-85.0
+70.0
 1.0
 1
 %
@@ -301,7 +338,7 @@ number-people
 number-people
 10
 carrying-capacity
-300.0
+190.0
 1
 1
 NIL
@@ -352,9 +389,9 @@ turtle-shape
 
 SLIDER
 10
-190
-212
-223
+185
+200
+218
 immunity-duration
 immunity-duration
 0
@@ -366,40 +403,40 @@ days
 HORIZONTAL
 
 SLIDER
-245
-50
-467
-83
+240
+45
+470
+78
 number-vaccinated
 number-vaccinated
 0
 300
-77.0
+0.0
 1
 1
 People
 HORIZONTAL
 
 SLIDER
-245
-100
-472
-133
+240
+135
+470
+168
 vaccine-immunity-time
 vaccine-immunity-time
 0
 365
-56.0
+220.0
 1
 1
 Days
 HORIZONTAL
 
 SLIDER
-245
-145
-507
-178
+240
+90
+470
+123
 vaccination-speed
 vaccination-speed
 0
@@ -439,6 +476,96 @@ TEXTBOX
 Virus
 20
 0.0
+1
+
+TEXTBOX
+15
+275
+190
+296
+Real Life Viruses
+20
+0.0
+1
+
+CHOOSER
+10
+310
+200
+355
+Virus
+Virus
+"Covid-19" "spanish-flu" "plague"
+2
+
+CHOOSER
+240
+310
+470
+355
+vaccine-brand
+vaccine-brand
+"pfizer" "moderna" "sinopharme" "astrazeneca"
+3
+
+SWITCH
+1055
+275
+1250
+308
+mask-on?
+mask-on?
+0
+1
+-1000
+
+SLIDER
+240
+185
+470
+218
+vaccine-efficacy
+vaccine-efficacy
+0
+100
+70.0
+1
+1
+%
+HORIZONTAL
+
+BUTTON
+65
+370
+137
+403
+confirm
+confirm-virus\n
+NIL
+1
+T
+OBSERVER
+NIL
+NIL
+NIL
+NIL
+1
+
+BUTTON
+310
+370
+382
+403
+confirm
+confirm-vaccine
+NIL
+1
+T
+OBSERVER
+NIL
+NIL
+NIL
+NIL
 1
 
 @#$#@#$#@
