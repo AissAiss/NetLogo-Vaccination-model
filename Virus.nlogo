@@ -43,10 +43,9 @@ end
 
 ;; Rendre malade une personne
 to get-sick
-  if not mask-on? [
      set sick? true
   set remaining-immunity 0
-  ]
+
 
 end
 
@@ -83,10 +82,9 @@ to go
     ;;vaccination ;; On vaccine
     if sick? [ recover-or-die ]
     ifelse sick? [ infect ] [ reproduce ]
+    boostVaccine
   ]
-
   vaccination
-
   update-global-variables
   update-display
   tick
@@ -125,13 +123,19 @@ end
 
 to vaccination
   ask n-of vaccination-speed turtles
-  [ if random-float 100 < vaccine-efficacy and not vaccinated?  [ get-vaccinated] ]
+  [ if random-float 100 < vaccine-efficacy and not vaccinated? and not immune?   [ get-vaccinated]]
+end
+
+to boostVaccine
+   if vaccinated? and  vaccinated-immunity < 2 and booster-shot? [
+    get-vaccinated
+  ]
 end
 
 ;; If a turtle is sick, it infects other turtles on the same patch.
 ;; Immune turtles don't get sick.
 to infect ;; turtle procedure
-  ask other turtles-here with [ not sick? and not immune? and not vaccinated?]
+  ask other turtles-here with [ not sick? and not immune? and not vaccinated? and not mask-on?]
     [ if random-float 100 < infectiousness
       [ get-sick ] ]
 end
@@ -441,7 +445,7 @@ vaccination-speed
 vaccination-speed
 0
 20
-0.0
+8.0
 1
 1
 Personne/Days
@@ -480,9 +484,9 @@ Virus
 
 TEXTBOX
 15
-275
+315
 190
-296
+336
 Real Life Viruses
 20
 0.0
@@ -490,9 +494,9 @@ Real Life Viruses
 
 CHOOSER
 10
-310
+350
 200
-355
+395
 Virus
 Virus
 "Covid-19" "spanish-flu" "plague"
@@ -500,9 +504,9 @@ Virus
 
 CHOOSER
 240
-310
+350
 470
-355
+395
 vaccine-brand
 vaccine-brand
 "pfizer" "moderna" "sinopharme" "astrazeneca"
@@ -510,9 +514,9 @@ vaccine-brand
 
 SWITCH
 1055
-275
+280
 1250
-308
+313
 mask-on?
 mask-on?
 0
@@ -528,7 +532,7 @@ vaccine-efficacy
 vaccine-efficacy
 0
 100
-70.0
+100.0
 1
 1
 %
@@ -536,9 +540,9 @@ HORIZONTAL
 
 BUTTON
 65
-370
+410
 137
-403
+443
 confirm
 confirm-virus\n
 NIL
@@ -553,9 +557,9 @@ NIL
 
 BUTTON
 310
-370
+410
 382
-403
+443
 confirm
 confirm-vaccine
 NIL
@@ -567,6 +571,17 @@ NIL
 NIL
 NIL
 1
+
+SWITCH
+240
+235
+470
+268
+booster-shot?
+booster-shot?
+1
+1
+-1000
 
 @#$#@#$#@
 ## WHAT IS IT?
