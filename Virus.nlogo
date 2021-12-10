@@ -9,6 +9,7 @@ globals
   [ %infected            ;; what % of the population is infectious
     %immune              ;; what % of the population is immune
     %vaccinated          ;; what % of the population is vaccinated
+    count_total
     lifespan             ;; the lifespan of a turtle
     chance-reproduce     ;; the probability of a turtle generating an offspring each tick
     carrying-capacity ]  ;; the number of turtles that can be in the world at one time
@@ -70,7 +71,7 @@ end
 ;; This sets up basic constants of the model.
 to setup-constants
   set lifespan 50 * 52      ;; 50 times 52 weeks = 50 years = 2600 weeks old
-  set carrying-capacity 300
+  set carrying-capacity number-people
   set chance-reproduce 1 ;; R0
   ;;set immunity-duration 52 ;; Changer la période d'imunité
 end
@@ -94,7 +95,9 @@ to update-global-variables
   if count turtles > 0
     [ set %infected (count turtles with [ sick? ] / count turtles) * 100
       set %immune (count turtles with [ immune? ] / count turtles) * 100
-      set %vaccinated (count turtles with [ vaccinated? ] / count turtles) * 100 ]
+      set %vaccinated (count turtles with [ vaccinated? ] / count turtles) * 100
+      set count_total count turtles
+      ]
 end
 
 to update-display
@@ -241,7 +244,7 @@ duration
 duration
 0.0
 20.0
-20.0
+14.0
 1.0
 1
 days
@@ -256,7 +259,7 @@ chance-recover
 chance-recover
 0.0
 99.0
-50.0
+97.0
 1.0
 1
 %
@@ -271,7 +274,7 @@ infectiousness
 infectiousness
 0.0
 99.0
-70.0
+50.0
 1.0
 1
 %
@@ -415,7 +418,7 @@ number-vaccinated
 number-vaccinated
 0
 300
-0.0
+133.0
 1
 1
 People
@@ -445,7 +448,7 @@ vaccination-speed
 vaccination-speed
 0
 20
-8.0
+0.0
 1
 1
 Personne/Days
@@ -500,7 +503,7 @@ CHOOSER
 Virus
 Virus
 "Covid-19" "spanish-flu" "plague"
-2
+0
 
 CHOOSER
 240
@@ -519,7 +522,7 @@ SWITCH
 313
 mask-on?
 mask-on?
-0
+1
 1
 -1000
 
